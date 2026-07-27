@@ -69,32 +69,24 @@
           <h3>Dejanos tus datos</h3>
           <p>Vamos a conectar este formulario con HubSpot para que las consultas lleguen directo a nuestro CRM.</p>
 
-          <form class="mountop-form" id="mountop-contact-form">
-            <div class="field">
-              <label for="nombre">Nombre</label>
-              <input type="text" id="nombre" name="nombre" required autocomplete="name">
-            </div>
-            <div class="field">
-              <label for="email">Email</label>
-              <input type="email" id="email" name="email" required autocomplete="email">
-            </div>
-            <div class="field">
-              <label for="telefono">Teléfono (opcional)</label>
-              <input type="tel" id="telefono" name="telefono" autocomplete="tel">
-            </div>
-            <div class="field">
-              <label for="mensaje">Mensaje</label>
-              <textarea id="mensaje" name="mensaje" required placeholder="Contanos qué necesitás..."></textarea>
-            </div>
-            <div class="field field--checkbox">
-              <label class="checkbox-label">
-                <input type="checkbox" id="consentimiento" name="consentimiento" required>
-                <span>Acepto que Mountop procese mis datos personales para responder a mi consulta, según su Política de Privacidad.</span>
-              </label>
-            </div>
-            <button type="submit" class="btn btn-primary">Enviar consulta</button>
-            <div class="form-status" id="form-status" role="status"></div>
-          </form>
+          <!--
+            INTEGRACIÓN CON HUBSPOT
+            ------------------------------------------------------------
+            1. En HubSpot: Marketing > Formularios > crear formulario.
+            2. Copiá el código de "insertar" (Embed code) que te da HubSpot,
+               que se ve más o menos así:
+
+               <script src="https://js.hsforms.net/forms/embed/TU_PORTAL_ID.js"></script>
+               <div class="hs-form-frame" data-region="TU_REGION" data-form-id="TU_FORM_ID" data-portal-id="TU_PORTAL_ID"></div>
+
+            3. Reemplazá TODO este bloque .hubspot-placeholder de abajo
+               por ese código.
+            ------------------------------------------------------------
+          -->
+          <div class="hubspot-placeholder">
+            Formulario de HubSpot próximamente.<br>
+            Mientras tanto, escribinos por WhatsApp o mail.
+          </div>
         </div>
 
       </div>
@@ -134,72 +126,5 @@
 
   <script src="js/script.js"></script>
   <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
-
-  <script>
-    // Envío del formulario de contacto directo a HubSpot vía Forms API
-    // (sin widget embebido, sin marca de HubSpot — el diseño es 100% nuestro)
-    const HUBSPOT_PORTAL_ID = "148981965";
-    const HUBSPOT_FORM_ID = "b3220aed-467d-4ee3-a43f-841ff86b7a47";
-
-    const contactForm = document.getElementById("mountop-contact-form");
-    const statusBox = document.getElementById("form-status");
-
-    contactForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const submitBtn = contactForm.querySelector("button[type=submit]");
-      submitBtn.disabled = true;
-      submitBtn.textContent = "Enviando...";
-      statusBox.className = "form-status";
-
-      const payload = {
-        fields: [
-          { name: "firstname", value: document.getElementById("nombre").value },
-          { name: "email", value: document.getElementById("email").value },
-          { name: "phone", value: document.getElementById("telefono").value },
-          { name: "message", value: document.getElementById("mensaje").value }
-        ],
-        context: {
-          pageUri: window.location.href,
-          pageName: document.title
-        },
-        legalConsentOptions: {
-          consent: {
-            consentToProcess: document.getElementById("consentimiento").checked,
-            text: "Acepto que Mountop procese mis datos personales para responder a mi consulta, según su Política de Privacidad.",
-            communications: []
-          }
-        }
-      };
-
-      try {
-        const res = await fetch(
-          `https://api.hsforms.com/submissions/v3/integration/submit/${HUBSPOT_PORTAL_ID}/${HUBSPOT_FORM_ID}`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload)
-          }
-        );
-
-        if (res.ok) {
-          statusBox.textContent = "¡Gracias! Recibimos tu consulta, te vamos a contactar a la brevedad.";
-          statusBox.className = "form-status is-visible is-success";
-          contactForm.reset();
-        } else {
-          const errData = await res.json().catch(() => null);
-          statusBox.textContent = "No pudimos enviar tu consulta. Probá de nuevo o escribinos por WhatsApp.";
-          statusBox.className = "form-status is-visible is-error";
-          console.error("HubSpot form error:", errData);
-        }
-      } catch (err) {
-        statusBox.textContent = "Hubo un problema de conexión. Probá de nuevo o escribinos por WhatsApp.";
-        statusBox.className = "form-status is-visible is-error";
-        console.error(err);
-      } finally {
-        submitBtn.disabled = false;
-        submitBtn.textContent = "Enviar consulta";
-      }
-    });
-  </script>
 </body>
 </html>
