@@ -363,6 +363,62 @@ button { font: inherit; cursor: pointer; }
   font-size: 0.85rem;
 }
 
+/* Formulario propio (envía a HubSpot por API, sin widget ni marca) */
+.mountop-form { display: flex; flex-direction: column; gap: 18px; }
+.mountop-form .field { display: flex; flex-direction: column; gap: 6px; }
+.mountop-form label {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fog);
+}
+.mountop-form input,
+.mountop-form textarea {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  color: var(--paper);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+}
+.mountop-form input:focus,
+.mountop-form textarea:focus {
+  outline: none;
+  border-color: var(--amber);
+}
+.mountop-form textarea { resize: vertical; min-height: 110px; }
+.field--checkbox { flex-direction: row; }
+.checkbox-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--fog);
+  cursor: pointer;
+}
+.checkbox-label input[type="checkbox"] {
+  margin-top: 3px;
+  width: 16px;
+  height: 16px;
+  accent-color: var(--amber);
+  flex-shrink: 0;
+}
+.mountop-form .btn { align-self: flex-start; border: none; }
+.mountop-form .btn[disabled] { opacity: 0.6; pointer-events: none; }
+.form-status {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  padding: 12px 14px;
+  border-radius: var(--radius);
+  display: none;
+}
+.form-status.is-visible { display: block; }
+.form-status.is-success { background: rgba(37, 211, 102, 0.12); color: #4be08a; border: 1px solid rgba(75, 224, 138, 0.3); }
+.form-status.is-error { background: rgba(193, 80, 46, 0.12); color: var(--ember); border: 1px solid rgba(193, 80, 46, 0.35); }
+
 /* ---------- FOOTER ---------- */
 .site-footer {
   background: var(--panel);
